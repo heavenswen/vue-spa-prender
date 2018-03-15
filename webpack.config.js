@@ -13,7 +13,7 @@ const ROOT = process.cwd();  // 根目录
 const HappyPack = require('happypack');
 const HappyThreadPool = HappyPack.ThreadPool({ size: (Env ? 10 : 4) });
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
-const release = Env ? '/webpack-page/dist/' : '/'//域名文件夹
+const release = Env ? '/' : '/'//域名文件夹
 //页面对应路口
 const entries = {}
 //入口对象集
@@ -233,14 +233,7 @@ const config = {
       // 将渲染的文件放到dist目录下
       join(__dirname, 'dist'),
       //需要预渲染的路由信息
-      ['/','/404'],
-      {//在一定时间后再捕获页面信息，使得页面数据信息加载完成
-        captureAfterTime: 50000,
-        //忽略打包错误
-        ignoreJSErrors: true,
-        phantomOptions: '--web-security=false',
-        maxAttempts: 10,
-      }
+      ['/','/about','/about/1','/about/2'],
     ),
     //webpack3.0
     new webpack.optimize.ModuleConcatenationPlugin()
@@ -251,7 +244,7 @@ const config = {
     ],
     port: 8010,
     //启动路由功能
-    //historyApiFallback: false,
+    historyApiFallback: true,
     // noInfo: true,
     hot: false,
     //真实地址 可以用局域访问

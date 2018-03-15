@@ -3,6 +3,7 @@
 import FalsePage from "views/false.vue"
 //默认首页
 import Main from "views/main.vue"
+import About from "views/about.vue"
 //pdf 页面
 // import Pdf from "views/pdf.vue"  
 
@@ -19,14 +20,25 @@ export default [
 		path: "/",
 		//模版
 		component: Main,
-		//自定义 页面名称
-		title:"首页",
 		//子集导航
 		children: [
 			{
 
 				path: "404",
 				component: FalsePage,
+			}
+		]
+	},
+	{
+		//对应导航
+		path: "/about",
+		//模版
+		component: About,
+		//子集导航
+		children: [
+			{
+				path: ":id",
+				component: About,
 			}
 		]
 	},

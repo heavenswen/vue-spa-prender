@@ -6,7 +6,7 @@
     transition: all .5s;
 }
 
-//进入开始效果, 离开结束效果
+//进入开始效果,
 
 // 透明
 .show-enter,.show-leave-to{
@@ -14,13 +14,15 @@
 }
 
 //滑动显示
-.swiper-enter,.show-leave-to,
-.swiper-leave-to,
+.swiper-enter
 {
     transform: translate3d(100%,0,0)
 
 }
-
+//离开结束效果
+.swiper-leave-to{
+    transform: scale(.9)
+}
 
 //开始结束效果，进入开始效果
 

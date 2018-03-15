@@ -13,6 +13,7 @@ import 'assets/css/react.scss'
 
 //路由配置
 const router = new VueRouter({
+    mode: 'history',
     //导航
     routes,
     scrollBehavior(to, from, savedPosition) {

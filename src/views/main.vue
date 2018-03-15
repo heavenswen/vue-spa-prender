@@ -1,11 +1,14 @@
 // 主内容容器
 <template>
-    <section class="main">
+    <div class="main">
         <h1 class="text--center">page main</h1>
+         <router-link to="/about">about</router-link>
+         <router-link to="/about/1">about 1</router-link>
+         <router-link to="/about/2">about 2</router-link>
         <transition :name='aniamte' mode="out-in" appear>
             <router-view></router-view>
         </transition>
-    </section>
+    </div>
 </template>
 <script>
 
@@ -15,7 +18,7 @@ export default {
             //过渡效果
             aniamte: 'swiper',
             //当前路由
-            path: "/"
+            path: "/",
         }
     },
     //创建完成时执行

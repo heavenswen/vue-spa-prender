@@ -2,7 +2,7 @@
 <template>
     <div id="app">
         <!--content 内容过渡层 appear 开始执行过渡-->
-        <transition name='show' mode="out-in" appear >
+        <transition name='swiper' mode="out-in" appear >
             <!-- 如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。 -->
             <keep-alive>
                 <router-view ></router-view>
