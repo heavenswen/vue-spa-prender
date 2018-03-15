@@ -1,0 +1,126 @@
+@import "~./_common.scss";
+//my.css
+#{$All} {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    outline: 0;
+}
+
+#{$H} {
+    font-weight: normal;
+}
+
+button,
+input[type=radio],
+input[type=checkbox],
+a {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    background: transparent;
+    color: inherit;
+    font-size: inherit
+}
+
+a img {
+    border: 0 none;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+audio,
+canvas,
+progress,
+video,
+    {
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+*,
+*:after,
+*:before {
+    box-sizing: inherit;
+}
+
+//去浮动
+*:after {
+    content: '';
+    clear: both;
+    height: 0;
+}
+
+small {
+    font-size: 80%;
+}
+
+button {
+    border-radius: 0;
+}
+
+button:focus {
+    outline: 1px dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+}
+textarea {
+    overflow: auto;
+    resize: vertical;
+  }
+
+input,
+button,
+select,
+optgroup,
+textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/*page*/
+
+body {
+    font-family: $F-F;
+    font-size: size(14, px);
+}
+
+@include container-bs();
+@include flex-bs();
+@include flex-bs-media();
+@include form-bs();
+@include form-bs-media();
+.block-loading {
+    @include icon-loading();
+}
+
+.block-sjx {
+    @include icon-sjx();
+}
+
+.block-list {
+    @include icon-list();
+}
+
+.block-close {
+    @include icon-close();
+}
+
+.block-more {
+    @include icon-more();
+}
+
+.btn-close {
+    appearance: none;
+    padding: 0;
+    margin: 0;
+    border: 0 none;
+    @include btn-icon-close();
+}

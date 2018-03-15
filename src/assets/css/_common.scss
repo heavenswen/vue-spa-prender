@@ -1,0 +1,107 @@
+//Q基础库
+//@import "*";
+//采用BEM 规则 （block）区块 （elements）元素 （Modifiers）修饰符 block__element--Mod
+//1页面上不建议出现空className
+//2js不建议用data-来操控,因为它表示为自定义数据，可以用[rel='']或id
+@import "~./_const";
+//排版
+// 利用absolute,fixed +transform上下居中 @include position-mid()
+@mixin position_mid($position:absolute) {
+    position: $position;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transform: translateY(-50%);
+}
+
+//absolute and margin 上下左右居中 必须有宽高,否则全屏
+@mixin position_center($position:absolute) {
+    position: $position;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+} 
+
+//栅格化布局
+@import "~./_flex";
+
+//container 响应式布局 类bs
+@import "~./_container";
+
+//form
+@import "~./form";
+
+//外观
+@import "~./_icon";
+
+
+//蒙板 (active焦点，背后颜色，进入效果，消失效果)
+//document.querySelector("").classList.toggle('active')
+@mixin mask-bg($showCl:active, $c:rgba(0, 0, 0, .6), $leave:scale(1), $enter:scale(1)) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    @include transition();
+    z-index: 99;
+    opacity: 0;
+    transform: $leave;
+    background-color: $c;
+    pointer-events: none;
+    &.#{$showCl} {
+        opacity: 1;
+        transform: $enter;
+        pointer-events: auto;
+    }
+}
+
+//变形
+//快速过渡@include transition()
+@mixin transition($type: all, $s: $TransitionTime) {
+    transition: $type $s;
+}
+
+//媒体
+//@content 可以用来解决css3的@media等带来的问题。它可以使@mixin接受一整块样式
+//@include max-media(480px) {
+//body { color: red }
+//}
+//最大尺寸（npx）
+@mixin max-media($w) {
+    @media( max-width: $w) {
+        @content;
+    }
+}
+
+//最小尺寸小（npx）
+@mixin min-media($w) {
+    @media( min-width: $w) {
+        @content;
+    }
+}
+
+@mixin iphoneX(){
+
+    @media only screen and (device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3) {
+        /* iPhone X 独有样式写在这里*/
+        @content;
+    }
+}
+
+//animate
+//循环
+//@each $child in $array{ //child... }
+//@for $i from 1 to 10{ //$i到9}
+//跳出嵌套 @at-root
+//@at-root (without: media)，@at-root (without: support)。这个语法的关键词有四个：all（表示所有），rule（表示常规css），media（表示media），support（表示support，因为@support目前还无法广泛使用，所以在此不表）。我们默认的@at-root其实就是@at-root (without:rule)。
+//继承 @extend h1; 继承选择器的样式
+//function @function pxToRem($px) {@return $px / $baseFontSize * 1rem;}
+//引用 body{font-size:pxToRem(16px);}
+//if @if $type == ocean {color: blue;} 
+//@else if $type == matador {color: red;}
+// @else {  color: black;}
+//@extend 引用已有的样式 @extend h1
