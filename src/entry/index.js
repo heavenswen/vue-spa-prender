@@ -26,7 +26,6 @@ const router = new VueRouter({
             }
         }
     },
-    //mode: 'history',
 });
 
 //导航激活回调
