@@ -1,188 +1,143 @@
-# webpack 多页环境搭建
+heavenswen.github.io
+----
+## SPA单页程序
+单页Web应用（single page web application，SPA），就是只有一张Web页面的应用，是加载单个HTML 页面并在用户与应用程序交互时动态更新该页面的Web应用程序。
 
-### 功能说明
+### 简介
+vuejs、reactjs MV**框架在数据和页面显示的优先表现也让人们很愿意开发使用这个开发策略，但这种形式由于使用js渲染的方式使数据在SEO上表现极差(爬虫只能抓取源码上的标签内容)，在解决SEO也成为了SPA程序的大难题：
++ 预渲染：在单页面应用程序中呈现静态HTM,无需使用 web 服务器实时动态编译 HTMLL。
+    + seo内容是固定的修改时需要重新打包吗，主要用于简单的场景。
+    + 相对SSR配置更简单。
+    + 到达速度更快。 
+    
+    
++ SSR：
+    + 更好的 SEO，由于搜索引擎爬虫抓取工具可以直接查看完全渲染的页面。
+    + 更快的内容到达时间(time-to-content)，特别是对于缓慢的网络情况或运行缓慢的设备。无需等待所有的 JavaScript 都完成下载并执行，才显示服务器渲染的标记，所以你的用户将会更快速地看到完整渲染的页面。通常可以产生更好的用户体验，并且对于那些「内容到达时间(time-to-content)与转化率直接相关」的应用程序而言，服务器端渲染(SSR)至关重要。
+    + 采用nodejs同构的方式
+    + 更多的服务器端负载。在 Node.js 中渲染完整的应用程序，显然会比仅仅提供静态文件的 server 更加大量占用 CPU 资源(CPU-intensive - CPU 密集)，因此如果你预料在高流量环境(high traffic)下使用，请准备相应的服务器负载，并明智地采用缓存策略。
 
-+ 编译：es6 （babel）,scss(node-sass), vue(vue-loader) 语法编译 --webpack.config
-+ 兼容 自动添加浏览器前缀 (postcss)，vw单位转换等
-+ 压缩：js(webpack),css(webpack),gif,jpg,png,svg(image-webpack-loader) --webpack.config
-+ 资源引入，页面引入(ejs) --index.js
+### 技术要点
+这边主要讲述的是以vuejs2使用wevpack3进行单页程序的编写和构建，利用插件[prerender-spa-plugin](https://github.com/chrisvfritz/prerender-spa-plugin)来对站点的生成。
+
+### 操作
+
+1. 下载依赖
 ```
-  <%= require(`../common/_meta.html`)  %>
-  <img src="<%= require(`assets/img/big.png`) %>" alt="">
-```
-无法引入带ejs的页面
-+ 实时代码查看，自动刷新浏览器(livereload) --index.ejs
-+ 自动生成分页(glob) --webpack.config
-+ 支持引入jquery,vue 公用 --index.js
-
-### 问题
-
-+ 开发模式中无法对新建页面进行编译
-
-
-## npm 操作
-
-#### 下载依赖
-```
-npm i
-```
-#### 发布
-```
-npm run build
+npm i prerender-spa-plugin
 ```
 
-
-#### 实时编译开发
+在window下，国内环境可能会出现： "file" argument must be a non-empty string 的错误这是因为缺少  phantomjs-prebuilt 依赖
 ```
-npm run dev
+npm i  phantomjs-prebuilt
 ```
-[localhost:8010](http://localhost:8010)
+然后你就会看到 npm wrr path H:\web\vue-prerender\node_modules\.bin\phantomjs.cmd
 
-
-####  config 开发模式
-监控配置 nodemon自动重启
+2. 下载 phantomjs
 ```
-npm run config
+npm i phantomjs
 ```
+PhantomJS 的地址是找不到的，根据它的提示我们手动下载。
 
-### 文件结构
+PhantomJS not found on PATH
+Downloading https://github.com/Medium/phantomjs/releases/download/v2.1.1//phantomjs-2.1.1-windows.zip
+Saving to C:\Users\qiu\AppData\Local\Temp\phantomjs\phantomjs-2.1.1-windows.zip
+Receiving...
 
-+ dist //生成发布目录
-+ src //源码
-    + assets //资源库
-        + js //js库
-        + css //样式库
-    + pages //页面模板
-        + index.ejs //单页面 生成时对应名称 ejs将生成html
-        + spa.ejs vue路由dome
-    + entry//页面入口
-        + index.js//入口为同名js
-    + views //vue视图模块
-    + components //vue组件库
-+ postcss.config.js //postcss 配置
-+ package-lock.json //锁定安装时的包的版本号，并且需要上传到git，以保证其他人在npm install时大家的依赖能保证一致。
-+ webpack.config.js //编译解析逻辑
-+ .eslintrc.js  //
-+ .gitignore  //git 过滤
-+ LICENSE //开源协议
-
-### CSS BEM規範
-提高CSS的可读化和oocss思想让css的可复用性更强
+3. 依照原来的提示
+```
+npm i  phantomjs-prebuilt
+```
+4. webpack.config.js
 
 ```
-    //写法 区块__元件--修饰
-    block__element--modaifer
-    //多个单词组成
-    block-name
-```
-###### Block 区块
-主要描述组件的主体
+var path = require('path')
+var PrerenderSpaPlugin = require('prerender-spa-plugin')
 
-###### Element 元素
-用来描述组件的单元
-###### Modifer 修饰
-用来描述样式和修饰，不重写组件基础样式，多种修饰应该分开写
+module.exports = {
+  // ...
+  plugins: [
+    new PrerenderSpaPlugin(
+      // 生成SPA的地址
+      path.join(__dirname, '../dist'),
+      // 需要路由的地址
+      [ '/', '/about', '/about/1' ]
+    )
+  ]
+}
 
-BEM写法虽然会加大代码量，但也很好的实现了OOCSS的思想，并且开服务器开启Gzip时，并不会增大多少体积。
+```
+如果你使用了模版引擎
+```
+new HtmlWebpackPlugin({
+  // ... your other options ...
+  // 确保注入异步块 <head>
+  inject: 'head',
+  // 确保按正确的顺序评估块
+  chunksSortMode: 'dependency'
+})
+```
+5. 如果使用vue-routes 
+```
+const router = new VueRouter({
+    mode: 'history',
+    
+})
+```
+history 模式，这种模式充分利用 history.pushState API 来完成 URL 跳转而无须重新加载页面,但是需要服务器的支持-[History 模式](https://router.vuejs.org/zh-cn/essentials/history-mode.html)
+##### Apache
+httpd.conf
+``` 
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+```
+nginx
+```
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+原生nodejs
+````
+const http = require('http')
+const fs = require('fs')
+const httpPort = 80
 
-### postcss说明
+http.createServer((req, res) => {
+  fs.readFile('index.htm', 'utf-8', (err, content) => {
+    if (err) {
+      console.log('We cannot open "index.htm" file.')
+    }
 
-#### autoprefixer 配置
-autoprefixer可以自动添加浏览器所需要的前缀
-1. postcss.confug.js
-```
- plugins: [
-        require('autoprefixer')({
-            // 兼容
-            "browserslist": [
-                "defaults",
-                "not ie < 10",
-                "last 2 versions",
-                "1%",
-                "iOS 7",
-                "last 3 iOS versions"
-            ]
-        }),
-        //px to vw
-        // require('postcss-px2viewport')
-    ],
-```
-2. package.json内增加
-```
-"browserslist": [
-   ">= 1%", //全球浏览器使用率大于1%或大于等于1%（上例中则是1%）。
-   "last 2 versions", //每个浏览器中最新的两个版本。
-   "ie 6-8", //选择包含ie6-8的版本。
-  "Firefox 20" //火狐版本号大于20。
-]
-```
-3. webpack.config.js使用LoaderOptionsPluginplugins
-```
-
- plugins: [
-    new webpack.LoaderOptionsPlugin({
-        options: {
-            postcss: function(){
-                return [
-                    require("autoprefixer")({
-                        browsers: ['ie>=8','>1% in CN']
-                    })
-                ]
-            }
-        }
+    res.writeHead(200, {
+      'Content-Type': 'text/html; charset=utf-8'
     })
-]
+
+    res.end(content)
+  })
+}).listen(httpPort, () => {
+  console.log('Server listening on: http://localhost:%s', httpPort)
+})
+```
+Express
+对于 Node.js/Express，请考虑使用 connect-history-api-fallback 中间件。
+webpack
+
+```
+devServer: {
+		port: 8010,
+		//设置为真,如果你想从任意url访问开发服务器。
+		historyApiFallback: true,
+		noInfo: true,
+		//设置这个如果你想启用gzip压缩的资产
+		compress: true,
+	},
+
 ```
 
-#### postcss-px2viewport说明
-vw方案是处理手机端自适应解决方案，设置设计稿尺寸，编写时能将我们编写的px转换成vw单位
-postcss.config.js 
-```
-plugins:[
-    require('postcss-px2viewport')
-]
-postcss: function () {
-        return [px2viewport({ viewportWidth: 750,viewportHeight:1334 })];
-}
-```
-.css 标记
-/*px*/的，则转换为[data-dpr="1"]、[data-dpr="2"]、[data-dpr="3"]三种不同的字体
-/*no*/的，则不做处理，依然使用px进行布局
-
-
-### nodemon 配置
-使用nodemon 监控文件webpack.config ，页面模版 在变化时重新执行 webpack $ npm i nodemon -D package.json 
-``` 
-"scripts": { 
-    "start": "nodemon
-" }
-``` 
-nodemon.json 
-//配置表 
-```
-{ 
-    "restartable": "rs", 
-    //忽略 
-    "ignore": [ ".git", "node_modules/" ], 
-    //输出详细启动与重启信息 
-    "verbose": true,
-    //运行服务的后缀名和对应的运行命令 
-    "execMap": { 
-        "js": "webpack-dev-server" 
-        }, 
-    //运行到某些状态时的一些触发事件 
-    "events": { 
-        //开始 
-        "start":"webpack-dev-server",
-        //重新启动 
-        "restart": "webpack-dev-server" 
-    },
-    "runOnChangeOnly":true, 
-    //监控目标 
-    "watch": [ "src/user/", "webpack.config.js" ],
-    "env": { "NODE_ENV": "development", "PORT": "3000" }, 
-    //监控的后缀 
-    "ext": "ejs html js", 
-    "legacy-watch": false 
-}
-```
