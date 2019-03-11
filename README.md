@@ -20,6 +20,11 @@ vuejs、reactjs MV**框架在数据和页面显示的优先表现也让人们很
 ### 技术要点
 这边主要讲述的是以vuejs2使用wevpack3进行单页程序的编写和构建，利用插件[prerender-spa-plugin](https://github.com/chrisvfritz/prerender-spa-plugin)来对站点的生成。
 
+PhantomJS是一个基于WebKit的服务器端JavaScript API，它基于 BSD开源协议发布。PhantomJS无需浏览器的支持即可实现对Web的支持，且原生支持各种Web标准，如DOM 处理、JavaScript、CSS选择器、JSON、Canvas和可缩放矢量图形SVG。PhantomJS主要是通过JavaScript和CoffeeScript控制WebKit的CSS选择器、可缩放矢量图形SVG和HTTP网络等各个模块。
+
+屏幕捕获：以编程方式抓起CSS、SVG和Canvas等页面内容，即可实现网络爬虫应用。构建服务端Web图形应用，如截图服务、矢量光栅图应用。
+网络监控：自动进行网络性能监控、跟踪页面加载情况以及将相关监控的信息以标准的HAR格式导出。
+
 ### 操作
 
 1. 下载依赖
